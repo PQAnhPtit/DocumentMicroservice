@@ -1,6 +1,9 @@
 package com.example.DocumentService.controller;
 
 import com.example.DocumentService.config.GoogleDriveConfig;
+import com.example.DocumentService.entities.Document;
+import com.example.DocumentService.models.GoogleDriveFileDTO;
+import com.example.DocumentService.models.GoogleDriveFoldersDTO;
 import com.example.DocumentService.services.impl.DocumentService;
 import com.example.DocumentService.services.impl.GoogleDriveFileService;
 import com.example.DocumentService.services.impl.GoogleDriveFolderService;
@@ -40,7 +43,7 @@ public class GoogleDriveController {
     GoogleDriveFolderService googleDriveFolderService;
 
 
-    /*@GetMapping("/listFileDriver")
+    @GetMapping("/listFileDriver")
     public String pageIndex(Model model) throws IOException, GeneralSecurityException {
         Drive drive = googleDriveConfig.getInstance();
         return "web/document/driver/driver-common";
@@ -75,7 +78,7 @@ public class GoogleDriveController {
         return "redirect:/myDriver";
     }
 
-    @GetMapping("/uploadFileGDriver")
+    /*@GetMapping("/uploadFileGDriver")
     public String uploadFileGDriver(@RequestParam("id") String id, HttpServletRequest request, Model model) throws Exception {
         model.addAttribute("file_id", id);
         String fileName = "";
@@ -112,9 +115,9 @@ public class GoogleDriveController {
             }
         }
         return "web/document/upl-gdri";
-    }*/
+    }
 
-    /*@PostMapping("/uploadFileKho")
+    @PostMapping("/uploadFileKho")
     public String uploadFileKho(@RequestParam("id") String id, Document document, HttpServletRequest request, HttpSession httpSession) throws Exception {
         String as = (String)httpSession.getAttribute("category_id");
         Cookie[] cookies = request.getCookies();
@@ -145,7 +148,7 @@ public class GoogleDriveController {
         }
         return "redirect:/listDocument/category?id=" + as;
     }
-
+*/
     @GetMapping("/delete/file/{id}")
     public String deleteFile(@PathVariable String id) throws Exception {
         googleDriveFileService.deleteFile(id);
@@ -155,5 +158,5 @@ public class GoogleDriveController {
     @GetMapping("/download/file/{id}")
     public void downloadFile(@PathVariable String id, HttpServletResponse response) throws IOException, GeneralSecurityException {
         googleDriveFileService.downloadFile(id, response.getOutputStream());
-    }*/
+    }
 }

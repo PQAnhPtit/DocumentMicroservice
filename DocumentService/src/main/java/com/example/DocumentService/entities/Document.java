@@ -21,10 +21,6 @@ public class Document {
     @Column(name = "document_type")
     String document_type;
 
-    @Lob
-    @Column(name = "data")
-    byte[] data;
-
     @Column(name = "link")
     String link;
 

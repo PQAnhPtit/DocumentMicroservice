@@ -16,12 +16,15 @@ public class Myconfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().authenticated();
+                     auth.antMatchers("/user/**").permitAll();
+                     auth.antMatchers("/login-user/**").permitAll();
+                    auth.antMatchers("/register/**").permitAll();
+                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(withDefaults())//oath->oath.loginProcessingUrl("/login").loginPage("/user")
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/loginGG")
-                        .loginProcessingUrl("/loginGG"))//oauth2Login -> oauth2Login.loginPage("/login").permitAll()
+                        .loginPage("/loginDV")
+                        .loginProcessingUrl("/loginDV"))//oauth2Login -> oauth2Login.loginPage("/login").permitAll()
                 .build();
     }
 }

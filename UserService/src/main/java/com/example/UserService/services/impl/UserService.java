@@ -39,4 +39,8 @@ public class UserService implements IUserService {
     public void delete(int id) {
         userRepo.deleteById(id);
     }
+
+    public User login(String email, String password) {
+        return userRepo.login(email, password);
+    }
 }

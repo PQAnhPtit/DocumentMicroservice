@@ -1,9 +1,9 @@
 package com.example.DocumentService.services.impl;
 
-import com.example.traodoitailieu.entities.Document;
-import com.example.traodoitailieu.models.GoogleDriveFileDTO;
-import com.example.traodoitailieu.repositories.DocumentRepo;
-import com.example.traodoitailieu.services.IDocumentService;
+import com.example.DocumentService.entities.Document;
+import com.example.DocumentService.models.GoogleDriveFileDTO;
+import com.example.DocumentService.repositories.DocumentRepo;
+import com.example.DocumentService.services.IDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -25,7 +25,6 @@ public class DocumentService implements IDocumentService {
             doc.setDocument_name(name);
             doc.setDescription(description);
             doc.setDocument_type(file.getContentType());
-            doc.setData(file.getBytes());
             doc.setLink(null);
             doc.setDocName(docname);
             documentRepo.save(doc);
@@ -41,7 +40,6 @@ public class DocumentService implements IDocumentService {
             doc.setDocument_name(name);
             doc.setDescription(description);
             doc.setDocument_type("Document from Google Drive");
-            doc.setData(null);
             doc.setLink(file.getLink());
             documentRepo.save(doc);
         } catch (Exception e) {
