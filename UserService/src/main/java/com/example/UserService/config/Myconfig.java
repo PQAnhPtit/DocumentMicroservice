@@ -1,3 +1,4 @@
+/*
 package com.example.UserService.config;
 
 import org.springframework.context.annotation.Bean;
@@ -28,3 +29,4 @@ public class Myconfig {
                 .build();
     }
 }
+*/

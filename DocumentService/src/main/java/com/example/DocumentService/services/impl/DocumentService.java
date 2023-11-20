@@ -1,69 +1,42 @@
 package com.example.DocumentService.services.impl;
 
-import com.example.DocumentService.entities.Document;
-import com.example.DocumentService.models.GoogleDriveFileDTO;
-import com.example.DocumentService.repositories.DocumentRepo;
+import com.example.DocumentService.entity.Document;
+import com.example.DocumentService.repository.IDocumentRepo;
 import com.example.DocumentService.services.IDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class DocumentService implements IDocumentService {
 
     @Autowired
-    DocumentRepo documentRepo;
+    private IDocumentRepo DocumentRepo;
 
     @Override
-    public void saveFile(MultipartFile file, String name, String description) {
-        String docname = StringUtils.cleanPath(file.getOriginalFilename());
-        try {
-            Document doc = new Document();
-            doc.setDocument_name(name);
-            doc.setDescription(description);
-            doc.setDocument_type(file.getContentType());
-            doc.setLink(null);
-            doc.setDocName(docname);
-            documentRepo.save(doc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void saveFileLink(GoogleDriveFileDTO file, String name, String description) {
-        try {
-            Document doc = new Document();
-            doc.setDocument_name(name);
-            doc.setDescription(description);
-            doc.setDocument_type("Document from Google Drive");
-            doc.setLink(file.getLink());
-            documentRepo.save(doc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public Document getFileById(int id) {
-        return documentRepo.findById(id).get();
-    }
-
-    @Override
-    public ArrayList<Document> getFiles() {
+    public ArrayList<Document> getAll() {
         ArrayList<Document> list = new ArrayList<>();
-        Iterable it = documentRepo.findAll();
-        for (Object doc: it){
-            list.add((Document) doc);
+        Iterable it = DocumentRepo.findAll();
+        for(Object Document: it){
+            list.add((Document) Document);
         }
         return list;
     }
 
     @Override
-    public void deleteById(int id){
-        documentRepo.deleteById(id);
+    public Optional<Document> getById(int id) {
+        return DocumentRepo.findById(id);
+    }
+
+    @Override
+    public Document save(Document Document) {
+        return DocumentRepo.save(Document);
+    }
+
+    @Override
+    public void delete(int id) {
+        DocumentRepo.deleteById(id);
     }
 }

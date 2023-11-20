@@ -1,15 +1,13 @@
 package com.example.DocumentService.services;
 
-import com.example.DocumentService.entities.Document;
-import com.example.DocumentService.models.GoogleDriveFileDTO;
-import org.springframework.web.multipart.MultipartFile;
+import com.example.DocumentService.entity.Document;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public interface IDocumentService {
-    void saveFile(MultipartFile file, String name, String description);
-    void saveFileLink(GoogleDriveFileDTO file, String name, String description);
-    Document getFileById(int id);
-    ArrayList<Document> getFiles();
-    void deleteById(int id);
+    ArrayList<Document> getAll();
+    Optional<Document> getById(int id);
+    Document save(Document Exam);
+    void delete(int id);
 }

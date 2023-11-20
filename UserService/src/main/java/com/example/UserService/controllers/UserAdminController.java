@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserAdminController {
@@ -18,7 +19,7 @@ public class UserAdminController {
 
     @GetMapping("")
     public ResponseEntity<ArrayList<User>> getAllUser() {
-        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<ArrayList<User>>(userService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -53,6 +54,7 @@ public class UserAdminController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable int id) {
         User UserNew = userService.getById(id).get();

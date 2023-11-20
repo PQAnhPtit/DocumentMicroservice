@@ -6,41 +6,39 @@ import com.example.UserService.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@CrossOrigin
 @RestController
 public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/loginDV")
+    /*@GetMapping("/loginDV")
     public String loginGG(HttpServletResponse response) {
         DefaultOidcUser user = (DefaultOidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        /*Cookie userCookie = new Cookie("user", user.getEmail());
+        Cookie userCookie = new Cookie("user", user.getEmail());
         userCookie.setMaxAge(3600);
-        response.addCookie(userCookie);*/
+        response.addCookie(userCookie);
+
         return user.getEmail();
-    }
+    }*/
 
     @GetMapping("/login-user/{email}/{password}")
     public User login(@PathVariable String email, @PathVariable String password, HttpServletResponse response) {
         User user = userService.login(email, password);
-        /*Cookie userCookie = new Cookie("user", user.getId()+"");
-        userCookie.setMaxAge(3600);
-        response.addCookie(userCookie);*/
         return user;
     }
 
-    @GetMapping("/register")
-    public User register(@RequestBody User user) {
-        return userService.save(user);
+    @PostMapping("/register")
+    public ResponseEntity<User> add(@RequestBody User User){
+        return new ResponseEntity<>(userService.save(User), HttpStatus.OK);
     }
+
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
