@@ -104,6 +104,46 @@ public class DocumentWebController {
         return documents;
     }
 
+    @GetMapping("/my-page/{user_id}")
+    public ArrayList<Document> getMyPage(@PathVariable int user_id) {
+        ArrayList<Document> documents = new ArrayList<>();
+        ArrayList<CategoryDocument> categoryDocuments = categoryDocumentService.getAll();
+        for(CategoryDocument a: categoryDocuments){
+            if(a.getUser_id() == user_id){
+                documents.add(documentService.getById(a.getDocument_id()).get());
+            }
+        }
+        return documents;
+    }
+
+    @DeleteMapping("/my-page/delete/{user_id}/{document_id}")
+    public ResponseEntity<Document> deleteDocument(@PathVariable int user_id,
+                                                   @PathVariable int document_id) {
+        ArrayList<CategoryDocument> categoryDocuments = categoryDocumentService.getAll();
+        for(CategoryDocument a: categoryDocuments){
+            if(a.getUser_id() == user_id && a.getDocument_id() == document_id){
+                categoryDocumentService.delete(a.getId());
+                documentService.delete(document_id);
+                break;
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{name}")
+    public ArrayList<Document> Search(@PathVariable String name){
+        ArrayList<Document> documentNew = new ArrayList<>();
+        ArrayList<Document> documents = documentService.getAll();
+        if(!name.equals("")){
+            for (Document doc: documents) {
+                if(doc.getName().toLowerCase().contains(name.toLowerCase())){
+                    documentNew.add(doc);
+                }
+            }
+        }
+        return documentNew;
+    }
+
 /*    @GetMapping("/uploadFileGDriver/{id}")
     public String uploadFileGDriver(@PathVariable String id, HttpServletRequest request, Model model) throws Exception {
         String fileName = "";
