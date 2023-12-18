@@ -13,5 +13,7 @@ public class Comment {
     private int id;
 
     private int user_id;
+    private int catedoc_id;
     private String description;
+    private String date_at;
 }

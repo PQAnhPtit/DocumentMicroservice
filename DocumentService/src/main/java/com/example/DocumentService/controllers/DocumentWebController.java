@@ -3,6 +3,7 @@ package com.example.DocumentService.controllers;
 import com.example.DocumentService.config.GoogleDriveConfig;
 import com.example.DocumentService.entity.CategoryDocument;
 import com.example.DocumentService.entity.Document;
+import com.example.DocumentService.models.DocumentNew;
 import com.example.DocumentService.models.GoogleDriveFileDTO;
 import com.example.DocumentService.models.GoogleDriveFoldersDTO;
 import com.example.DocumentService.services.ICategoryDocumentService;
@@ -12,9 +13,7 @@ import com.example.DocumentService.services.impl.GoogleDriveFolderService;
 import com.google.api.services.drive.Drive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +22,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -89,19 +91,49 @@ public class DocumentWebController {
         categoryDocument.setCategory_id(category_id);
         categoryDocument.setDocument_id(document_id);
         categoryDocument.setUser_id(user_id);
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = currentDate.format(formatter);
+        categoryDocument.setDate_post(formattedDate);
         return categoryDocumentService.save(categoryDocument);
     }
 
     @GetMapping("/kho-tai-lieu/{category_id}")
-    public ArrayList<Document> getCategoryDocumentByID(@PathVariable int category_id) {
-        ArrayList<Document> documents = new ArrayList<>();
+    public ArrayList<CategoryDocument> getCategoryDocumentByID(@PathVariable int category_id) {
+        ArrayList<CategoryDocument> documents = new ArrayList<>();
         ArrayList<CategoryDocument> categoryDocuments = categoryDocumentService.getAll();
         for(CategoryDocument a: categoryDocuments){
             if(a.getCategory_id() == category_id){
-                documents.add(documentService.getById(a.getDocument_id()).get());
+                documents.add(a);
             }
         }
         return documents;
+    }
+
+    @GetMapping("/category-document/{id}")
+    public Document getCategoryDocumentNew(@PathVariable int id) {
+        CategoryDocument categoryDocument = categoryDocumentService.getById(id).get();
+        Document document = documentService.getById(categoryDocument.getDocument_id()).get();
+        return document;
+    }
+
+
+    @GetMapping("/kho-tai-lieu-home")
+    public ArrayList<CategoryDocument> getCategoryDocumentHomeByID() {
+        ArrayList<CategoryDocument> categoryDocuments = categoryDocumentService.getAll();
+        return categoryDocuments;
+    }
+
+    @GetMapping("/kho-tai-lieu-my-page/{user_id}")
+    public ArrayList<CategoryDocument> getCategoryDocumentMyPageByID(@PathVariable int user_id) {
+        ArrayList<CategoryDocument> categoryDocuments = categoryDocumentService.getAll();
+        ArrayList<CategoryDocument> categoryDocumentNew = new ArrayList<>();
+        for(CategoryDocument a: categoryDocuments){
+            if(a.getUser_id() == user_id){
+                categoryDocumentNew.add(a);
+            }
+        }
+        return categoryDocumentNew;
     }
 
     @GetMapping("/my-page/{user_id}")
@@ -142,6 +174,16 @@ public class DocumentWebController {
             }
         }
         return documentNew;
+    }
+
+    @DeleteMapping("/category-document/{id}")
+    public ResponseEntity<CategoryDocument> deleteCategoryDocument(@PathVariable int id) {
+        CategoryDocument categoryDocumentNew = categoryDocumentService.getById(id).get();
+        if(categoryDocumentNew != null){
+            categoryDocumentService.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 /*    @GetMapping("/uploadFileGDriver/{id}")

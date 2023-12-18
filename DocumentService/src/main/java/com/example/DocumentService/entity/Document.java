@@ -3,6 +3,7 @@ package com.example.DocumentService.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "Document")
 @Entity
@@ -15,4 +16,5 @@ public class Document {
     private String name;
     private String description;
     private String link;
+    private String img;
 }
